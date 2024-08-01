@@ -3,7 +3,7 @@
 import { NextResponse } from 'next/server';
 
 export default async function handler(req) {
-    const targetUrl = 'https://www.youtube.com' + req.nextUrl.pathname; // Замените на целевой URL
+    const targetUrl = 'https://www.youtube.com/watch?v=' + req.nextUrl.pathname; // Замените на целевой URL
 
     const response = await fetch(targetUrl, {
         method: req.method,
