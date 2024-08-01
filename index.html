@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fullscreen YouTube Video</title>
+    <style>
+        /* Make the iframe fill the entire viewport */
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        #player {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+    <script>
+        // Load the IFrame Player API code asynchronously.
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        // Create the YouTube player
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '100%',
+                width: '100%',
+                videoId: 'LXb3EKWsInQ', // Default video ID
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        // Function to change the video ID
+        function changeVideoId(newVideoId) {
+            if (player) {
+                player.loadVideoById(newVideoId);
+            }
+        }
+
+        // The API will call this function when the video player is ready.
+        function onPlayerReady(event) {
+            event.target.playVideo();
+        }
+
+        // The API calls this function when the player's state changes.
+        function onPlayerStateChange(event) {
+            if (event.data == YT.PlayerState.PLAYING) {
+                // Do something when the video starts playing
+            }
+        }
+    </script>
+</head>
+<body>
+<div id="player"></div>
+<!-- Example function call to change video ID -->
+<script>
+    // Call this function to change the video ID after loading
+    // changeVideoId('new_video_id_here');
+</script>
+</body>
+</html>
