@@ -1,23 +1,23 @@
 // api/proxy.js
 
-import { IncomingMessage, request } from 'http';
+import { NextResponse } from 'next/server';
 
-export default function handler(req, res) {
-    const targetUrl = 'https://www.youtube.com' + req.url; // Прокси для YouTube
+export default async function handler(req) {
+    const targetUrl = 'https://www.youtube.com' + req.nextUrl.pathname; // Замените на целевой URL
 
-    const options = {
+    const response = await fetch(targetUrl, {
         method: req.method,
         headers: req.headers,
-    };
-
-    const proxyReq = request(targetUrl, options, (proxyRes) => {
-        res.writeHead(proxyRes.statusCode, proxyRes.headers);
-        proxyRes.pipe(res, {
-            end: true,
-        });
+        body: req.method === 'POST' ? req.body : null,
     });
 
-    req.pipe(proxyReq, {
-        end: true,
+    const responseHeaders = {};
+    response.headers.forEach((value, key) => {
+        responseHeaders[key] = value;
+    });
+
+    return new NextResponse(response.body, {
+        status: response.status,
+        headers: responseHeaders,
     });
 }
